@@ -8,10 +8,17 @@ def set_volume(volume):
     # Assuming volume is a percentage (0-100)
     subprocess.run(["pactl", "set-sink-volume", "@DEFAULT_SINK@", f"{volume}%"])
 
+def initialize_volume():
+    # Set the initial volume to 30%
+    set_volume(30)
+
 def create_gui():
     root = tk.Tk()
     root.geometry("600x400")
     root.title("Bluetooth Media Player Control")
+
+    # Initialize volume
+    initialize_volume()
 
     # Button to play
     play_button = tk.Button(root, text="Play", command=lambda: send_command("play"))
@@ -31,6 +38,7 @@ def create_gui():
 
     # Volume slider
     volume_slider = tk.Scale(root, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", command=set_volume)
+    volume_slider.set(30)  # Set the slider to 30% initially
     volume_slider.pack(pady=10)
 
     # Close button
