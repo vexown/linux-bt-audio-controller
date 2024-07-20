@@ -25,7 +25,7 @@ def create_gui():
     volume_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
     # Volume slider
-    volume_slider = tk.Scale(volume_frame, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", length=900, width=150, command=set_volume)
+    volume_slider = tk.Scale(volume_frame, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", length=900, width=150, sliderlength=100, command=set_volume)
     volume_slider.set(30)  # Set initial volume
     volume_slider.pack(pady=20)  # Add padding around slider
 
