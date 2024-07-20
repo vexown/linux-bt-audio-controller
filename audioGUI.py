@@ -1,49 +1,61 @@
-import subprocess
 import tkinter as tk
-
-def send_command(command):
-    subprocess.run(["./btDriver", command])
+import subprocess
 
 def set_volume(volume):
-    # Assuming volume is a percentage (0-100)
+    """Set system volume to the given level (0-100)."""
     subprocess.run(["pactl", "set-sink-volume", "@DEFAULT_SINK@", f"{volume}%"])
 
-def initialize_volume():
-    # Set the initial volume to 30%
-    set_volume(30)
+def send_command(command):
+    """Send a command to the media player script."""
+    subprocess.run(["./btDriver", command])
 
 def create_gui():
     root = tk.Tk()
-    root.geometry("600x400")
-    root.title("Bluetooth Media Player Control")
+    root.attributes("-fullscreen", True)  # Make the window fullscreen
 
-    # Initialize volume
-    initialize_volume()
+    # Configure the grid layout
+    root.grid_rowconfigure(0, weight=1)  # Row for empty space above the volume slider
+    root.grid_rowconfigure(1, weight=1)  # Row for volume slider
+    root.grid_rowconfigure(2, weight=0)  # Row for control buttons
+    root.grid_rowconfigure(3, weight=0)  # Row for close button
+    root.grid_columnconfigure(0, weight=1)  # Column will expand horizontally
 
-    # Button to play
-    play_button = tk.Button(root, text="Play", command=lambda: send_command("play"))
-    play_button.pack(pady=10)
-
-    # Button to pause
-    pause_button = tk.Button(root, text="Pause", command=lambda: send_command("pause"))
-    pause_button.pack(pady=10)
-
-    # Button to play next
-    next_button = tk.Button(root, text="Next", command=lambda: send_command("next"))
-    next_button.pack(pady=10)
-
-    # Button to play previous
-    prev_button = tk.Button(root, text="Previous", command=lambda: send_command("previous"))
-    prev_button.pack(pady=10)
+    # Frame for volume slider, centered in the window
+    volume_frame = tk.Frame(root)
+    volume_frame.grid(row=1, column=0, padx=10, pady=10, sticky="nsew")
 
     # Volume slider
-    volume_slider = tk.Scale(root, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", command=set_volume)
-    volume_slider.set(30)  # Set the slider to 30% initially
-    volume_slider.pack(pady=10)
+    volume_slider = tk.Scale(volume_frame, from_=0, to=100, orient=tk.HORIZONTAL, label="Volume", length=600, width=50, command=set_volume)
+    volume_slider.set(30)  # Set initial volume
+    volume_slider.pack(pady=20)  # Add padding around slider
+
+    # Frame for control buttons at the bottom
+    button_frame = tk.Frame(root)
+    button_frame.grid(row=2, column=0, padx=10, pady=10, sticky="ew")
+
+    # Define button dimensions
+    button_width = 12
+    button_height = 2
+
+    # Play button
+    play_button = tk.Button(button_frame, text="Play", command=lambda: send_command("play"), width=button_width, height=button_height)
+    play_button.grid(row=0, column=0, padx=5, pady=5)
+
+    # Pause button
+    pause_button = tk.Button(button_frame, text="Pause", command=lambda: send_command("pause"), width=button_width, height=button_height)
+    pause_button.grid(row=0, column=1, padx=5, pady=5)
+
+    # Next button
+    next_button = tk.Button(button_frame, text="Next", command=lambda: send_command("next"), width=button_width, height=button_height)
+    next_button.grid(row=0, column=2, padx=5, pady=5)
+
+    # Previous button
+    prev_button = tk.Button(button_frame, text="Previous", command=lambda: send_command("previous"), width=button_width, height=button_height)
+    prev_button.grid(row=0, column=3, padx=5, pady=5)
 
     # Close button
-    close_button = tk.Button(root, text="Close", command=root.quit)
-    close_button.pack(side=tk.BOTTOM, padx=10, pady=10)
+    close_button = tk.Button(root, text="Close", command=root.quit, width=button_width, height=button_height)
+    close_button.grid(row=3, column=0, sticky="se", padx=10, pady=10)
 
     root.mainloop()
 
