@@ -11,7 +11,7 @@ def send_command(command):
 
 def create_gui():
     root = tk.Tk()
-    root.geometry("1024x600")  # Set the window size to 1024x600
+    root.geometry("1024x500")  # Set the window size to 1024x600
 
     # Configure the grid layout
     root.grid_rowconfigure(0, weight=1)  # Row for empty space above the volume slider
